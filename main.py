@@ -1,4 +1,5 @@
 import pygame
+from pygame.constants import K_DOWN, K_UP
 
 pygame.init()
 
@@ -22,12 +23,21 @@ def draw_shapes():
     pygame.draw.rect(WINDOW, "white", player2)
     pygame.draw.ellipse(WINDOW, "white", ball)
 
+def setup_keylistener():
+    keys_pressed = pygame.key.get_pressed()
+    if keys_pressed[K_UP]:
+        player1.y -= 8
+    if keys_pressed[K_DOWN]:
+        player1.y += 8
+
 # Game loop
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
+    setup_keylistener()
+    WINDOW.fill("black")
     draw_shapes()
     pygame.display.update()
     clock.tick(FPS)
