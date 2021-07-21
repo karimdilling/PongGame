@@ -17,10 +17,14 @@ player1 = pygame.Rect(0, WIN_HEIGHT / 2 - 70, 20, 140)
 player2 = pygame.Rect(WIN_WIDTH - 20, WIN_HEIGHT / 2 - 70, 20, 140)
 ball = pygame.Rect(WIN_WIDTH / 2 - 20, WIN_HEIGHT / 2 - 20, 40, 40)
 
+# Game loop
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
+    pygame.draw.rect(WINDOW, "white", player1)
+    pygame.draw.rect(WINDOW, "white", player2)
+    pygame.draw.ellipse(WINDOW, "white", ball)
     pygame.display.update()
     clock.tick(FPS)
