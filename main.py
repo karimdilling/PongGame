@@ -41,16 +41,22 @@ def handle_quitting():
             pygame.quit()
             exit()
 
-# Game loop
-while True:
-    handle_quitting()
-    setup_keylistener()
+def handle_ball_movement():
+    global ball_speed_x, ball_speed_y
     ball.x += ball_speed_x
     ball.y += ball_speed_y
     if ball.top <= 0 or ball.bottom >= WIN_HEIGHT:
         ball_speed_y *= -1
     if ball.left <= 0 or ball.right >= WIN_WIDTH:
         ball_speed_x *= -1
+    if ball.colliderect(player1) or ball.colliderect(player2):
+        ball_speed_x *= -1
+
+# Game loop
+while True:
+    handle_quitting()
+    setup_keylistener()
+    handle_ball_movement()
     WINDOW.fill("black")
     draw_shapes()
     pygame.display.update()
