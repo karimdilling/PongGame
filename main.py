@@ -9,6 +9,7 @@ WIN_WIDTH = 1280
 WIN_HEIGHT = 960
 WINDOW = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
 pygame.display.set_caption("Pong Game")
+WINDOW_RECT = pygame.Rect(0, 0 , WIN_WIDTH, WIN_HEIGHT) # used for the clamp method
 
 # Setup game clock
 clock = pygame.time.Clock()
@@ -50,7 +51,7 @@ def handle_ball_movement():
     if ball.top <= 0 or ball.bottom >= WIN_HEIGHT:
         ball_speed_y *= -1
     if ball.left <= 0 or ball.right >= WIN_WIDTH:
-        ball_speed_x *= -1
+        reset_ball()
     if ball.colliderect(player1) or ball.colliderect(player2):
         ball_speed_x *= -1
 
@@ -60,9 +61,17 @@ def control_player2_ai():
     if player2.bottom > ball.y:
         player2.bottom -= player2_speed
 
+def reset_ball():
+    global ball_speed_x, ball_speed_y
+    ball.center = (WIN_WIDTH / 2 - 20, WIN_HEIGHT / 2 - 20)
+    ball_speed_x *= random.choice((-1, 1))
+    ball_speed_y *= random.choice((-1, 1))
+
 # Game loop
 while True:
     handle_quitting()
+    player1.clamp_ip(WINDOW_RECT) # handles player bars to not being able to move out of the window
+    player2.clamp_ip(WINDOW_RECT)
     setup_keylistener()
     handle_ball_movement()
     control_player2_ai()
