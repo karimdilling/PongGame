@@ -19,9 +19,11 @@ player1 = pygame.Rect(0, WIN_HEIGHT / 2 - 70, 20, 140)
 player2 = pygame.Rect(WIN_WIDTH - 20, WIN_HEIGHT / 2 - 70, 20, 140)
 ball = pygame.Rect(WIN_WIDTH / 2 - 20, WIN_HEIGHT / 2 - 20, 40, 40)
 
-# Define speed of the ball
+# Define speeds
 ball_speed_x = 5
 ball_speed_y = 5
+player1_speed = 8
+player2_speed = 5
 
 def draw_shapes():
     pygame.draw.rect(WINDOW, "white", player1)
@@ -31,9 +33,9 @@ def draw_shapes():
 def setup_keylistener():
     keys_pressed = pygame.key.get_pressed()
     if keys_pressed[K_UP]:
-        player1.y -= 8
+        player1.y -= player1_speed
     if keys_pressed[K_DOWN]:
-        player1.y += 8
+        player1.y += player1_speed
 
 def handle_quitting():
     for event in pygame.event.get():
@@ -52,11 +54,18 @@ def handle_ball_movement():
     if ball.colliderect(player1) or ball.colliderect(player2):
         ball_speed_x *= -1
 
+def control_player2_ai():
+    if player2.top< ball.y:
+        player2.top += player2_speed
+    if player2.bottom > ball.y:
+        player2.bottom -= player2_speed
+
 # Game loop
 while True:
     handle_quitting()
     setup_keylistener()
     handle_ball_movement()
+    control_player2_ai()
     WINDOW.fill("black")
     draw_shapes()
     pygame.display.update()
