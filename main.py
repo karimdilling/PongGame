@@ -1,7 +1,9 @@
 import pygame
 from pygame.constants import K_DOWN, K_UP
 import random
+import os
 
+pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.init()
 
 # Define window
@@ -34,6 +36,11 @@ font = pygame.font.Font(None, 36)
 loc_score_player1 = (player1.right + 10, 10)
 loc_score_player2 = (WIN_WIDTH - 150, 10)
 
+# Implement sounds
+current_dir = os.path.dirname(os.path.abspath(__file__))
+hit_sound = pygame.mixer.Sound(current_dir + "/sounds/hit_sound.wav")
+scored_sound = pygame.mixer.Sound(current_dir + "/sounds/scored_sound.wav")
+
 def draw_shapes():
     pygame.draw.rect(WINDOW, "white", player1)
     pygame.draw.rect(WINDOW, "white", player2)
@@ -61,8 +68,10 @@ def handle_ball_movement():
     if ball.left <= 0 or ball.right >= WIN_WIDTH:
         update_score()
         reset_ball()
+        pygame.mixer.Sound.play(scored_sound)
     if ball.colliderect(player1) or ball.colliderect(player2):
         ball_speed_x *= -1
+        pygame.mixer.Sound.play(hit_sound)
 
 def control_player2_ai():
     if player2.top< ball.y:
