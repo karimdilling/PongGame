@@ -26,6 +26,14 @@ ball_speed_y = 5
 player1_speed = 8
 player2_speed = 5
 
+# Score of the players
+points_player1 = 0
+points_player2 = 0
+font_color = (255, 255, 255)
+font = pygame.font.Font(None, 36)
+loc_score_player1 = (player1.right + 10, 10)
+loc_score_player2 = (WIN_WIDTH - 150, 10)
+
 def draw_shapes():
     pygame.draw.rect(WINDOW, "white", player1)
     pygame.draw.rect(WINDOW, "white", player2)
@@ -51,6 +59,7 @@ def handle_ball_movement():
     if ball.top <= 0 or ball.bottom >= WIN_HEIGHT:
         ball_speed_y *= -1
     if ball.left <= 0 or ball.right >= WIN_WIDTH:
+        update_score()
         reset_ball()
     if ball.colliderect(player1) or ball.colliderect(player2):
         ball_speed_x *= -1
@@ -67,6 +76,19 @@ def reset_ball():
     ball_speed_x *= random.choice((-1, 1))
     ball_speed_y *= random.choice((-1, 1))
 
+def update_score():
+    global points_player1, points_player2
+    if ball.left <= 0:
+        points_player2 += 1
+        print(points_player2)
+    if ball.right >= WIN_WIDTH:
+        points_player1 += 1
+        print(points_player1)
+
+def setup_score_labels():
+    WINDOW.blit(font.render(f"Player 1: {points_player1}", True, font_color), loc_score_player1)
+    WINDOW.blit(font.render(f"Player 2: {points_player2}", True, font_color), loc_score_player2)
+
 # Game loop
 while True:
     handle_quitting()
@@ -77,5 +99,6 @@ while True:
     control_player2_ai()
     WINDOW.fill("black")
     draw_shapes()
+    setup_score_labels()
     pygame.display.update()
     clock.tick(FPS)
